@@ -27,13 +27,34 @@
 import download
 
 # Import other libraries
-import logging
+import settings
 
 __author__ = 'Alejandro F. Carrera'
 
 # Main
 
 if __name__ == '__main__':
-    logging.info(" * API Generator Started")
-    download.get_repo()
-    logging.info(" * API Generator Finished")
+    settings.print_message(" * [%s] Started" % settings.LONGNAME)
+
+    # Get and Clone Repository
+    __repo = download.get_repo()
+
+    # Get Branches information
+    __branches = __repo.branches.keys()
+    settings.print_message(" * [%s] Number of branches %d" %
+                           (settings.LONGNAME, len(__branches)))
+
+    # Get Branches information (only selected branches)
+    __real_branches = []
+    if settings.GEN_BRANCH is None:
+        __real_branches = __branches
+    else:
+        for i in __branches:
+            if settings.GEN_BRANCH in i:
+                __real_branches.append(i)
+        settings.print_message(" * [%s] Number of branches (%s) %d" %
+                               (settings.LONGNAME, settings.GEN_BRANCH,
+                                len(__real_branches)))
+
+    settings.print_message(" * [%s] Finished" % settings.LONGNAME)
+
