@@ -61,4 +61,5 @@ target/
 
 # GitLab Files
 gitlab-ce-repo
- 
+gitlab-gen-repo
+gitlab-doc-repo 
