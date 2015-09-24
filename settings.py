@@ -42,6 +42,9 @@ GEN_REP_GIT = "https://github.com/SmartDeveloperHub/gitlab-api-generator.git"
 GEN_REP_DISK_PATH = "/tmp/gitlab-gen-repo"
 GEN_REP_BRANCH = "v."
 
+# Generator Doc Paths
+GEN_DOC_DISK_PATH = "/tmp/gitlab-ce-repo-doc"
+
 
 def print_message(msg):
     if DEBUGGER:
