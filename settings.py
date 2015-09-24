@@ -31,17 +31,16 @@ LONGNAME = "Gitlab API Generator"
 
 # Generator Gitlab Paths
 GEN_GL_GIT = "https://gitlab.com/gitlab-org/gitlab-ce.git"
-GEN_GL_DISK_PATH = "gitlab-ce-repo"
+GEN_GL_DISK_PATH = "/tmp/gitlab-ce-repo"
 GEN_GL_BRANCH = "stable"
+GEN_GL_BRANCH_REMOVE = [
+    "update_for_stable"
+]
 
 # Generator API Paths
 GEN_REP_GIT = "https://github.com/SmartDeveloperHub/gitlab-api-generator.git"
-GEN_REP_DISK_PATH = "gitlab-gen-repo"
+GEN_REP_DISK_PATH = "/tmp/gitlab-gen-repo"
 GEN_REP_BRANCH = "v."
-
-# Generator Doc Paths
-GEN_DOC_GIT = "https://gitlab.com/gitlab-com/doc-gitlab-com.git"
-GEN_DOC_DISK_PATH = "gitlab-doc-repo"
 
 
 def print_message(msg):
@@ -53,6 +52,6 @@ def print_message(msg):
 
 def print_error(msg):
     if DEBUGGER:
-        logging.warn("[ERROR] %s" % msg)
+        logging.error("[ERROR] %s" % msg)
     else:
         logging.info("[ERROR] %s" % msg)
