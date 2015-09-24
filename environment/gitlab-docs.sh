@@ -9,9 +9,10 @@ sudo apt-get dist-upgrade -y
 sudo apt-get remove pandoc
 
 # Install and update Haskell
-sudo apt-get install haskell-platform
+sudo apt-get install haskell-platform -y
 cabal update
 
 # Install pandoc
 cabal install pandoc --ghc-options="-O0"
-ln -s /root/.cabal/bin/pandoc /usr/bin/pandoc
+name=`whoami`
+sudo ln -s /home/$name/.cabal/bin/pandoc /usr/bin/pandoc
