@@ -19,40 +19,21 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
-import os
-import shutil
-import gittle
-import settings
-
 __author__ = 'Alejandro F. Carrera'
 
 
-def clone_repo(repository, file_path):
-    settings.print_message("Cloning %s ... Please wait" % repository)
-    repo = gittle.Gittle.clone(repository, file_path, bare=True)
-    settings.print_message("Cloned %s to %s." % (repository, file_path))
-    return repo
+def get_branches_with_filter(repository, fil):
+    __branches = repository.branches.keys()
+    if fil is None:
+        return __branches
+    else:
+        return [x for x in __branches if fil in x]
 
 
-def get_repo(repository, file_path):
-
-    if os.path.exists(file_path):
-        if not os.path.isdir(file_path):
-            settings.print_message("%s is not directory. It was removed." % file_path)
-            os.remove(file_path)
-        else:
-            settings.print_message("%s is a directory. It was removed." % file_path)
-            shutil.rmtree(file_path, True)
-    return clone_repo(repository, file_path)
+def remove_info_from_branches(branches_list, fil, branches_to_remove):
+    __branches = branches_list
+    for i in branches_to_remove:
+        __branches.remove(i)
+    return map(lambda x: x.replace("-" + fil, ""), __branches)
 
 
-def get_repo_gitlab():
-    return get_repo(settings.GEN_GL_GIT, settings.GEN_GL_DISK_PATH)
-
-
-def get_repo_library():
-    return get_repo(settings.GEN_REP_GIT, settings.GEN_REP_DISK_PATH)
-
-
-def get_repo_documentation():
-    return get_repo(settings.GEN_DOC_GIT, settings.GEN_DOC_DISK_PATH)
