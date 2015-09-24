@@ -19,6 +19,11 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
+import os
+import shutil
+import settings
+from subprocess import call
+
 __author__ = 'Alejandro F. Carrera'
 
 
@@ -36,4 +41,18 @@ def remove_info_from_branches(branches_list, fil, branches_to_remove):
         __branches.remove(i)
     return map(lambda x: x.replace("-" + fil, ""), __branches)
 
+
+def move_to_specific_branch(repository, branch):
+    repository.switch_branch(branch)
+
+
+def generate_doc(branch):
+    file_path = settings.GEN_DOC_DISK_PATH
+    if os.path.exists(file_path):
+        if not os.path.isdir(file_path):
+            os.remove(file_path)
+        else:
+            shutil.rmtree(file_path, True)
+    settings.print_message(" - Generating branch: %s." % branch)
+    call(["./gitlab-docs/generate.rb"])
 
