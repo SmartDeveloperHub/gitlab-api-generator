@@ -19,7 +19,6 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
-import os
 import logging
 
 __author__ = 'Alejandro F. Carrera'
@@ -30,10 +29,19 @@ VERSION = "0.1.0"
 DEBUGGER = True
 LONGNAME = "Gitlab API Generator"
 
-# Generator Paths
-GEN_GL_PATH = "https://gitlab.com/gitlab-org/gitlab-ce.git"
-GEN_DISK_PATH = "gitlab-ce-repo"
-GEN_BRANCH = "stable"
+# Generator Gitlab Paths
+GEN_GL_GIT_PATH = "https://gitlab.com/gitlab-org/gitlab-ce.git"
+GEN_GL_DISK_PATH = "gitlab-ce-repo"
+GEN_GL_BRANCH = "stable"
+
+# Generator API Paths
+GEN_REP_GIT = "https://github.com/SmartDeveloperHub/gitlab-api-generator.git"
+GEN_REP_DISK_PATH = "gitlab-gen-repo"
+GEN_REP_BRANCH = "v."
+
+# Generator Doc Paths
+GEN_DOC_GIT = "https://gitlab.com/gitlab-com/doc-gitlab-com.git"
+GEN_DOC_DISK_PATH = "gitlab-doc-repo"
 
 
 def print_message(msg):
