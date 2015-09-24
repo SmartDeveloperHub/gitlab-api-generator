@@ -26,25 +26,33 @@ import settings
 
 __author__ = 'Alejandro F. Carrera'
 
-GEN_DISK_PATH = settings.GEN_DISK_PATH
-GEN_GL_PATH = settings.GEN_GL_PATH
 
-
-def clone_repo():
-    settings.print_message("Cloning %s ... Please wait" % GEN_GL_PATH)
-    repo = gittle.Gittle.clone(GEN_GL_PATH, GEN_DISK_PATH, bare=True)
-    settings.print_message("Cloned %s to %s." % (GEN_GL_PATH, GEN_DISK_PATH))
+def clone_repo(repository, file_path):
+    settings.print_message("Cloning %s ... Please wait" % repository)
+    repo = gittle.Gittle.clone(repository, file_path, bare=True)
+    settings.print_message("Cloned %s to %s." % (repository, file_path))
     return repo
 
 
-def get_repo():
+def get_repo(repository, file_path):
 
-    if os.path.exists(GEN_DISK_PATH):
-        if not os.path.isdir(GEN_DISK_PATH):
-            settings.print_message("%s is not directory. It was removed." % GEN_DISK_PATH)
-            os.remove(GEN_DISK_PATH)
+    if os.path.exists(file_path):
+        if not os.path.isdir(file_path):
+            settings.print_message("%s is not directory. It was removed." % file_path)
+            os.remove(file_path)
         else:
-            settings.print_message("%s is a directory. It was removed." % GEN_DISK_PATH)
-            shutil.rmtree(GEN_DISK_PATH, True)
-    return clone_repo()
+            settings.print_message("%s is a directory. It was removed." % file_path)
+            shutil.rmtree(file_path, True)
+    return clone_repo(repository, file_path)
 
+
+def get_repo_gitlab():
+    return get_repo(settings.GEN_GL_GIT, settings.GEN_GL_DISK_PATH)
+
+
+def get_repo_library():
+    return get_repo(settings.GEN_REP_GIT, settings.GEN_REP_DISK_PATH)
+
+
+def get_repo_documentation():
+    return get_repo(settings.GEN_DOC_GIT, settings.GEN_DOC_DISK_PATH)

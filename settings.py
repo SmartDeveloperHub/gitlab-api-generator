@@ -30,7 +30,7 @@ DEBUGGER = True
 LONGNAME = "Gitlab API Generator"
 
 # Generator Gitlab Paths
-GEN_GL_GIT_PATH = "https://gitlab.com/gitlab-org/gitlab-ce.git"
+GEN_GL_GIT = "https://gitlab.com/gitlab-org/gitlab-ce.git"
 GEN_GL_DISK_PATH = "gitlab-ce-repo"
 GEN_GL_BRANCH = "stable"
 
