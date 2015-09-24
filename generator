@@ -24,7 +24,8 @@
 """
 
 # Import Generator files
-import download
+from utils import download
+from utils import repository
 
 # Import other libraries
 import settings
@@ -36,25 +37,28 @@ __author__ = 'Alejandro F. Carrera'
 if __name__ == '__main__':
     settings.print_message(" * [%s] Started" % settings.LONGNAME)
 
-    # Get and Clone Repository
-    __repo = download.get_repo()
+    # Get and Clone Repositories
+    __repo_gl = download.get_repo_gitlab()
+    __repo_lib = download.get_repo_library()
 
-    # Get Branches information
-    __branches = __repo.branches.keys()
-    settings.print_message(" * [%s] Number of branches %d" %
-                           (settings.LONGNAME, len(__branches)))
+    # Get Branches information [filter]
+    __gl_branches = repository.get_branches_with_filter(
+        __repo_gl, settings.GEN_GL_BRANCH
+    )
+    __repo_branches = repository.get_branches_with_filter(
+        __repo_lib, settings.GEN_REP_BRANCH
+    )
 
-    # Get Branches information (only selected branches)
-    __real_branches = []
-    if settings.GEN_BRANCH is None:
-        __real_branches = __branches
-    else:
-        for i in __branches:
-            if settings.GEN_BRANCH in i:
-                __real_branches.append(i)
-        settings.print_message(" * [%s] Number of branches (%s) %d" %
-                               (settings.LONGNAME, settings.GEN_BRANCH,
-                                len(__real_branches)))
+    # Replace -[filter] by blank and others unnecessary branches
+    __gl_branches = repository.remove_info_from_branches(
+        __gl_branches, settings.GEN_GL_BRANCH, settings.GEN_GL_BRANCH_REMOVE
+    )
+    __repo_branches = repository.remove_info_from_branches(
+        __repo_branches, settings.GEN_REP_BRANCH, []
+    )
+
+    # Get diff between branches
+    __gen_branches = list(set(__gl_branches) - set(__repo_branches))
 
     settings.print_message(" * [%s] Finished" % settings.LONGNAME)
 
