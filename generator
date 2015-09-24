@@ -38,6 +38,7 @@ if __name__ == '__main__':
     settings.print_message(" * [%s] Started" % settings.LONGNAME)
 
     # Get and Clone Repositories
+    settings.print_message(" * [%s] Checking and clone Repositories ... " % settings.LONGNAME)
     __repo_gl = download.get_repo_gitlab()
     __repo_lib = download.get_repo_library()
 
@@ -59,6 +60,16 @@ if __name__ == '__main__':
 
     # Get diff between branches
     __gen_branches = list(set(__gl_branches) - set(__repo_branches))
+    __gen_branches_rt = map(lambda x: x + "-" + settings.GEN_GL_BRANCH, __gen_branches)
+
+    settings.print_message(" * [%s] Generating documentation ... " % settings.LONGNAME)
+    for i in __gen_branches_rt:
+
+        # Checkout to specific branch
+        repository.move_to_specific_branch(__repo_gl, i)
+
+        # Generate documentation
+        repository.generate_doc(i)
 
     settings.print_message(" * [%s] Finished" % settings.LONGNAME)
 
