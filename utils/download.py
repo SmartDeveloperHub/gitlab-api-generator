@@ -28,9 +28,9 @@ __author__ = 'Alejandro F. Carrera'
 
 
 def clone_repo(repository, file_path):
-    settings.print_message("Cloning %s ... Please wait" % repository)
+    settings.print_message(" - Cloning %s ... Please wait" % repository)
     repo = gittle.Gittle.clone(repository, file_path, bare=False)
-    settings.print_message("Cloned %s to %s." % (repository, file_path))
+    settings.print_message(" - Cloned at %s directory." % file_path)
     return repo
 
 
@@ -38,10 +38,10 @@ def get_repo(repository, file_path):
 
     if os.path.exists(file_path):
         if not os.path.isdir(file_path):
-            settings.print_message("%s is not directory. It was removed." % file_path)
+            settings.print_message(" - Removed file: %s." % file_path)
             os.remove(file_path)
         else:
-            settings.print_message("%s is a directory. It was removed." % file_path)
+            settings.print_message(" - Removed directory: %s." % file_path)
             shutil.rmtree(file_path, True)
     return clone_repo(repository, file_path)
 
