@@ -38,53 +38,60 @@ __author__ = 'Alejandro F. Carrera'
 if __name__ == '__main__':
     settings.print_message(" * [%s] Started" % settings.LONGNAME)
 
-    # Get and Clone Repositories
-    settings.print_message(" * [%s] Checking and clone Repositories ... " % settings.LONGNAME)
-    __repo_gl = download.get_repo_gitlab()
-    __repo_lib = download.get_repo_library()
+    try:
 
-    # Get Branches information [filter]
-    __gl_branches = repository.get_branches_with_filter(
-        __repo_gl, settings.GEN_GL_BRANCH
-    )
-    __repo_branches = repository.get_branches_with_filter(
-        __repo_lib, settings.GEN_REP_BRANCH
-    )
+        # Get and Clone Repositories
+        settings.print_message(" * [%s] Checking and clone Repositories ... " % settings.LONGNAME)
 
-    # Replace -[filter] by blank and others unnecessary branches
-    __gl_branches = repository.remove_info_from_branches(
-        __gl_branches, settings.GEN_GL_BRANCH, settings.GEN_GL_BRANCH_REMOVE
-    )
-    __repo_branches = repository.remove_info_from_branches(
-        __repo_branches, settings.GEN_REP_BRANCH, []
-    )
+        __repo_gl = download.get_repo_gitlab()
+        __repo_lib = download.get_repo_library()
 
-    # Get diff between branches
-    __gen_branches = list(set(__gl_branches) - set(__repo_branches))
-    __gen_branches_rt = map(lambda x: x + "-" + settings.GEN_GL_BRANCH, __gen_branches)
+        # Get Branches information [filter]
+        __gl_branches = repository.get_branches_with_filter(
+            __repo_gl, settings.GEN_GL_BRANCH
+        )
+        __repo_branches = repository.get_branches_with_filter(
+            __repo_lib, settings.GEN_REP_BRANCH
+        )
 
-    settings.print_message(" * [%s] Generating documentation ... " % settings.LONGNAME)
-    for i in __gen_branches_rt:
+        # Replace -[filter] by blank and others unnecessary branches
+        __gl_branches = repository.remove_info_from_branches(
+            __gl_branches, settings.GEN_GL_BRANCH, settings.GEN_GL_BRANCH_REMOVE
+        )
+        __repo_branches = repository.remove_info_from_branches(
+            __repo_branches, settings.GEN_REP_BRANCH, []
+        )
 
-        md = {}
+        # Get diff between branches
+        __gen_branches = list(set(__gl_branches) - set(__repo_branches))
+        __gen_branches_rt = map(lambda x: x + "-" + settings.GEN_GL_BRANCH, __gen_branches)
 
-        # Checkout to specific branch
-        repository.move_to_specific_branch(__repo_gl, i)
+        settings.print_message(" * [%s] Generating documentation ... " % settings.LONGNAME)
+        for i in __gen_branches_rt:
 
-        # Generate documentation
-        repository.generate_doc(i)
+            # Checkout to specific branch
+            repository.move_to_specific_branch(__repo_gl, i)
 
-        # Move only HTML API Docs
-        repository.move_docs_folder(settings.GEN_DOC_DISK_PATH + "/api", settings.GEN_DOC_DISK_PATH)
+            # Generate documentation
+            repository.generate_doc(i)
 
-        # Remove unnecessary files
-        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/deploy_key_multiple_projects.html")
-        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/deploy_keys.html")
-        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/settings.html")
-        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/services.html")
-        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/README.html")
-        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/oauth2.html")
-        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/keys.html")
+            # Move only HTML API Docs
+            repository.move_docs_folder(settings.GEN_DOC_DISK_PATH + "/api", settings.GEN_DOC_DISK_PATH)
+
+            # Remove unnecessary files
+            repository.remove_file(settings.GEN_DOC_DISK_PATH + "/deploy_key_multiple_projects.html")
+            repository.remove_file(settings.GEN_DOC_DISK_PATH + "/deploy_keys.html")
+            repository.remove_file(settings.GEN_DOC_DISK_PATH + "/settings.html")
+            repository.remove_file(settings.GEN_DOC_DISK_PATH + "/services.html")
+            repository.remove_file(settings.GEN_DOC_DISK_PATH + "/README.html")
+            repository.remove_file(settings.GEN_DOC_DISK_PATH + "/oauth2.html")
+            repository.remove_file(settings.GEN_DOC_DISK_PATH + "/keys.html")
+
+            # Parse and generate code
+            md = parse.generate_code_for_dir(settings.GEN_DOC_DISK_PATH)
+
+    except Exception as e:
+        settings.print_error(" * [%s] Error: " % (settings.LONGNAME, e.message))
 
     settings.print_message(" * [%s] Finished" % settings.LONGNAME)
 
