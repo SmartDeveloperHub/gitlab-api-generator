@@ -26,6 +26,7 @@
 # Import Generator files
 from utils import download
 from utils import repository
+from utils import parse
 
 # Import other libraries
 import settings
@@ -65,11 +66,25 @@ if __name__ == '__main__':
     settings.print_message(" * [%s] Generating documentation ... " % settings.LONGNAME)
     for i in __gen_branches_rt:
 
+        md = {}
+
         # Checkout to specific branch
         repository.move_to_specific_branch(__repo_gl, i)
 
         # Generate documentation
         repository.generate_doc(i)
+
+        # Move only HTML API Docs
+        repository.move_docs_folder(settings.GEN_DOC_DISK_PATH + "/api", settings.GEN_DOC_DISK_PATH)
+
+        # Remove unnecessary files
+        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/deploy_key_multiple_projects.html")
+        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/deploy_keys.html")
+        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/settings.html")
+        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/services.html")
+        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/README.html")
+        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/oauth2.html")
+        repository.remove_file(settings.GEN_DOC_DISK_PATH + "/keys.html")
 
     settings.print_message(" * [%s] Finished" % settings.LONGNAME)
 
