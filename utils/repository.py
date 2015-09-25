@@ -46,6 +46,17 @@ def move_to_specific_branch(repository, branch):
     repository.switch_branch(branch)
 
 
+def move_docs_folder(source, destination):
+    shutil.rmtree("/tmp/destiny_tmp", True)
+    shutil.move(source, "/tmp/destiny_tmp")
+    shutil.rmtree(destination, True)
+    shutil.move("/tmp/destiny_tmp", destination)
+
+
+def remove_file(file_path):
+    os.remove(file_path)
+
+
 def generate_doc(branch):
     file_path = settings.GEN_DOC_DISK_PATH
     if os.path.exists(file_path):
