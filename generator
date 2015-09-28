@@ -91,7 +91,7 @@ if __name__ == '__main__':
             md = parse.generate_code_for_dir(settings.GEN_DOC_DISK_PATH)
 
     except Exception as e:
-        settings.print_error(" * [%s] Error: " % (settings.LONGNAME, e.message))
+        settings.print_error(" * [%s] %s" % (settings.LONGNAME, e.message))
 
     settings.print_message(" * [%s] Finished" % settings.LONGNAME)
 
