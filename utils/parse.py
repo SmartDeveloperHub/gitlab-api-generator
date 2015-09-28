@@ -90,10 +90,14 @@ def generate_metadata(string):
             "string": __string,
             "name": __name,
             "method": __match,
-            "param": __parameters,
-            "param_number": len(__parameters)
+            "url_param": __parameters,
+            "url_param_number": len(__parameters)
         }
     return {}
+
+
+def generate_param_from_table(param, string):
+    print "FOUND: [" + str(param) + "]: " + str(string)
 
 
 class CUSTOM_PARSE(HTMLParser):
@@ -103,19 +107,35 @@ class CUSTOM_PARSE(HTMLParser):
     def __init__(self):
         self.reset()
         self.actual_tag = None
+        self.actual_api = None
         self.name = None
+        self.param_mode = False
+        self.param_data = None
         self.api = {}
 
     def handle_starttag(self, tag, attrs):
         self.actual_tag = tag
 
     def handle_endtag(self, tag):
-        pass
+        if tag == "ul":
+            self.param_mode = False
 
     def handle_data(self, data):
+        if self.actual_tag == "p" and data == "Parameters:":
+            self.param_mode = True
         if self.actual_tag == "code" and check_api_call(data):
             md = generate_metadata(data)
-            self.api[md.get("string")] = md
+            self.actual_api = md.get("string")
+            self.api[self.actual_api] = md
+            self.param_mode = False
+        if self.actual_tag == "code" and self.param_mode and not \
+           str(data).startswith(" (") and str(data) != "\n":
+            self.param_data = data
+        elif self.actual_tag == "code" and self.param_mode and str(data).startswith(" ("):
+            print "FOUND [" + self.param_data + "]: " + data
+            self.param_data = None
+        else:
+            pass
 
 
 def generate_code_from_file(file_name, file_path):
