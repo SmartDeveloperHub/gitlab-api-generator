@@ -50,11 +50,11 @@ def print_message(msg):
     if DEBUGGER:
         logging.warn("[DEBUG] %s" % msg)
     else:
-        logging.info("[INFO] %s" % msg)
+        logging.warn("[INFO]  %s" % msg)
 
 
 def print_error(msg):
     if DEBUGGER:
-        logging.error("[ERROR] %s" % msg)
+        logging.error("[ERROR]   %s" % msg)
     else:
-        logging.info("[ERROR] %s" % msg)
+        logging.warn("[ERROR] %s" % msg)
