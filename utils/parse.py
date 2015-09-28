@@ -27,28 +27,95 @@ from HTMLParser import HTMLParser
 __author__ = 'Alejandro F. Carrera'
 
 
+def check_api_call(string):
+
+    # Remove examples
+    if "?" in str(string):
+        return False
+
+    # Only detect 4 HTTP Methods
+    call = ["GET", "POST", "PUT", "DELETE"]
+    for i in call:
+        if str(string).startswith(i):
+            return True
+    return False
+
+
+def generate_name_from_metadata(method, string, param):
+    __name = method.lower()
+    if __name == "put":
+        __name = "modify"
+    elif __name == "post":
+        __name = "create"
+    else:
+        pass
+    __string = string
+    for i in param:
+        __string = __string.replace("/:" + i, "")
+    __string = __string.split("/")
+    for i in __string:
+        __name += ("_" + i)
+    return __name
+
+
+def generate_param_from_metadata(string):
+    __string_arr = string.split(":")
+    __string_arr.pop(0)
+    __string_res = []
+    for i in __string_arr:
+        if "/" in i:
+            __string_res.append(i.split("/")[0])
+        else:
+            __string_res.append(i)
+    return __string_res
+
+
+def generate_metadata(string):
+    __string = str(string)
+
+    # Remove Whitespaces
+    __string.strip()
+    __string = " ".join(__string.split())
+    __string = __string.replace(" ", "")
+
+    # Get Method and Parse
+    __methods = ["GET", "POST", "PUT", "DELETE"]
+    __match = [s for s in __methods if __string.startswith(s)]
+    if len(__match) > 0:
+        __match = __match[0]
+        __string = __string.replace(__match + "/", "")
+        __parameters = generate_param_from_metadata(__string)
+        __name = generate_name_from_metadata(__match, __string, __parameters)
+        return {
+            "string": __string,
+            "name": __name,
+            "method": __match,
+            "param": __parameters,
+            "param_number": len(__parameters)
+        }
+    return {}
+
+
 class CUSTOM_PARSE(HTMLParser):
 
     pre_tag = None
 
     def __init__(self):
         self.reset()
-        self.pre_tag = None
+        self.actual_tag = None
         self.name = None
+        self.api = {}
 
     def handle_starttag(self, tag, attrs):
-        if self.pre_tag == "pre" and tag == "code":
-            self.pre_tag = "pre_code"
-        else:
-            self.pre_tag = tag
+        self.actual_tag = tag
 
     def handle_endtag(self, tag):
         pass
 
     def handle_data(self, data):
-        if self.pre_tag == "pre_code":
-            print data
-        self.pre_tag = None
+        if self.actual_tag == "code" and check_api_call(data):
+            md = generate_metadata(data)
+            self.api[md.get("string")] = md
 
 
 def generate_code_from_file(file_name, file_path):
@@ -64,6 +131,9 @@ def generate_code_from_file(file_name, file_path):
     parser = CUSTOM_PARSE()
     parser.name = name_lo
     parser.feed(fi.read())
+
+    for i in parser.api:
+        print("%s : %s" % (i, parser.api[i]))
 
     return {
         "name": name_lo,
