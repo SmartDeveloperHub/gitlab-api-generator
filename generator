@@ -67,6 +67,7 @@ if __name__ == '__main__':
         __gen_branches_rt = map(lambda x: x + "-" + settings.GEN_GL_BRANCH, __gen_branches)
 
         settings.print_message(" * [%s] Generating documentation ... " % settings.LONGNAME)
+
         for i in __gen_branches_rt:
 
             # Checkout to specific branch
@@ -81,14 +82,20 @@ if __name__ == '__main__':
             # Remove unnecessary files
             repository.remove_file(settings.GEN_DOC_DISK_PATH + "/deploy_key_multiple_projects.html")
             repository.remove_file(settings.GEN_DOC_DISK_PATH + "/deploy_keys.html")
+
             repository.remove_file(settings.GEN_DOC_DISK_PATH + "/settings.html")
             repository.remove_file(settings.GEN_DOC_DISK_PATH + "/services.html")
             repository.remove_file(settings.GEN_DOC_DISK_PATH + "/README.html")
             repository.remove_file(settings.GEN_DOC_DISK_PATH + "/oauth2.html")
             repository.remove_file(settings.GEN_DOC_DISK_PATH + "/keys.html")
 
+            # !! TODO: This version is not compatible with these docs
+            repository.remove_file(settings.GEN_DOC_DISK_PATH + "/merge_requests.html")
+            repository.remove_file(settings.GEN_DOC_DISK_PATH + "/milestones.html")
+            repository.remove_file(settings.GEN_DOC_DISK_PATH + "/issues.html")
+
             # Parse and generate code
-            md = parse.generate_code_for_dir(settings.GEN_DOC_DISK_PATH)
+            md = parse.generate_meta_code(settings.GEN_DOC_DISK_PATH)
 
     except Exception as e:
         settings.print_error(" * [%s] %s" % (settings.LONGNAME, e.message))
