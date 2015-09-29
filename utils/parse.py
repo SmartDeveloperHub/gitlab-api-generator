@@ -55,18 +55,27 @@ def generate_name_from_metadata(method, string, param):
     __string = __string.split("/")
     for i in __string:
         __name += ("_" + i)
+    for i in param:
+        j = i
+        if "_" in j:
+            j = i.split("_")
+            j[0] = j[0].capitalize()
+            j[1] = j[1].capitalize()
+            __name += ("_by" + j[0] + j[1])
+        else:
+            __name += ("_by" + j.capitalize())
     return __name
 
 
 def generate_param_from_metadata(string):
     __string_arr = string.split(":")
     __string_arr.pop(0)
-    __string_res = []
+    __string_res = {}
     for i in __string_arr:
         if "/" in i:
-            __string_res.append(i.split("/")[0])
+            __string_res[(i.split("/")[0])] = {}
         else:
-            __string_res.append(i)
+            __string_res[i] = {}
     return __string_res
 
 
@@ -91,13 +100,33 @@ def generate_metadata(string):
             "name": __name,
             "method": __match,
             "url_param": __parameters,
-            "url_param_number": len(__parameters)
+            "url_param_number": len(__parameters.keys()),
+            "spec_param": {},
+            "spec_param_number": 0
         }
     return {}
 
 
-def generate_param_from_table(param, string):
-    print "FOUND: [" + str(param) + "]: " + str(string)
+def generate_metadata_parameter(api, param, string):
+    __url_parameters = api.get("url_param").keys()
+    if "-" in string:
+        __str_split = str(string).split(" - ")
+        if __str_split[1] == "if ":
+            __desc = ""
+        else:
+            __desc = __str_split[1]
+        __req = __str_split[0] == " (required)"
+    else:
+        __desc = ""
+        __req = str(string) == " (required)"
+    if param in __url_parameters:
+        api["url_param"][param] = __desc
+    else:
+        api["spec_param"][param] = {
+            "description": __desc,
+            "required": __req
+        }
+        api["spec_param_number"] += 1
 
 
 class CUSTOM_PARSE(HTMLParser):
@@ -125,14 +154,14 @@ class CUSTOM_PARSE(HTMLParser):
             self.param_mode = True
         if self.actual_tag == "code" and check_api_call(data):
             md = generate_metadata(data)
-            self.actual_api = md.get("string")
+            self.actual_api = md.get("name")
             self.api[self.actual_api] = md
             self.param_mode = False
         if self.actual_tag == "code" and self.param_mode and not \
            str(data).startswith(" (") and str(data) != "\n":
             self.param_data = data
         elif self.actual_tag == "code" and self.param_mode and str(data).startswith(" ("):
-            print "FOUND [" + self.param_data + "]: " + data
+            generate_metadata_parameter(self.api[self.actual_api], self.param_data, data)
             self.param_data = None
         else:
             pass
@@ -142,7 +171,6 @@ def generate_code_from_file(file_name, file_path):
 
     # Get function
     name_lo = str(file_name).replace(".html", "").lower()
-    name = name_lo.upper()
 
     # Get file
     fi = open(file_path, 'r')
@@ -152,16 +180,13 @@ def generate_code_from_file(file_name, file_path):
     parser.name = name_lo
     parser.feed(fi.read())
 
-    for i in parser.api:
-        print("%s : %s" % (i, parser.api[i]))
-
     return {
         "name": name_lo,
-        "data": None
+        "data": parser.api
     }
 
 
-def generate_code_for_dir(file_dir):
+def generate_meta_code(file_dir):
     md = {}
     settings.print_message(" - Generating code: %s ... " % file_dir)
     for i in os.listdir(file_dir):
