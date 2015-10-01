@@ -20,7 +20,6 @@
 """
 
 import os
-import shutil
 import settings
 from HTMLParser import HTMLParser
 
@@ -179,17 +178,17 @@ def generate_code_from_file(file_name, file_path):
     parser = CUSTOM_PARSE()
     parser.name = name_lo
     parser.feed(fi.read())
-
-    return {
-        "name": name_lo,
-        "data": parser.api
-    }
+    return parser.api
 
 
 def generate_meta_code(file_dir):
     md = {}
-    settings.print_message(" - Generating code: %s ... " % file_dir)
+    settings.print_message(" - Generating metadata from html docs ... ")
     for i in os.listdir(file_dir):
         gen_code = generate_code_from_file(i, file_dir + "/" + i)
-        md[gen_code.get("name")] = gen_code.get("data")
+        for j in gen_code:
+            if j in md.keys():
+                settings.print_message(" * Duplicated at [" + i + "]: " + md[j].get("string"))
+            else:
+                md[j] = gen_code[j]
     return md
