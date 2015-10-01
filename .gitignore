@@ -63,3 +63,4 @@ target/
 gitlab-ce-repo
 gitlab-gen-repo
 gitlab-doc-repo 
+generated/*.py
