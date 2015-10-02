@@ -31,7 +31,7 @@ except ImportError:
 __author__ = 'Alejandro F. Carrera'
 
 # Load metadata (code)
-with open('metadata.json') as data_file:
+with open('glapi/metadata.json') as data_file:
     metadata = json.load(data_file)
 
 

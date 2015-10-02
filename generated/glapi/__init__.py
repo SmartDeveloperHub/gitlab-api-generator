@@ -19,41 +19,4 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
-import logging
-
 __author__ = 'Alejandro F. Carrera'
-
-# Generator Package Configuration
-NAME = "gl-api-generator"
-VERSION = "1.2.0"
-DEBUGGER = True
-LONGNAME = "Gitlab API Generator"
-
-# Generator Gitlab Paths
-GEN_GL_GIT = "https://gitlab.com/gitlab-org/gitlab-ce.git"
-GEN_GL_DISK_PATH = "/tmp/gitlab-ce-repo"
-GEN_GL_BRANCH = "stable"
-GEN_GL_BRANCH_REMOVE = [
-    "update_for_stable"
-]
-
-# Generator Doc Paths
-GEN_DOC_DISK_PATH = "/tmp/gitlab-ce-repo-doc"
-
-# Pypi Configuration
-PYPI_USER = ""
-PYPI_PASS = ""
-
-
-def print_message(msg):
-    if DEBUGGER:
-        logging.warn("[DEBUG] %s" % msg)
-    else:
-        logging.warn("[INFO]  %s" % msg)
-
-
-def print_error(msg):
-    if DEBUGGER:
-        logging.error("[ERROR]   %s" % msg)
-    else:
-        logging.warn("[ERROR] %s" % msg)

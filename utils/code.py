@@ -29,7 +29,7 @@ __author__ = 'Alejandro F. Carrera'
 
 def save_json_metadata(metadata):
     settings.print_message(" - Saving metadata at json format ... ")
-    f = open("generated/metadata.json", "w")
+    f = open("generated/glapi/metadata.json", "w")
     f.write(json.dumps(metadata))
     f.close()
 
@@ -39,7 +39,7 @@ def generate_pycode():
     f = open("generated/template.tmp", "r")
     t_file = f.read()
     f.close()
-    f = open("generated/glapi.py", "w")
+    f = open("generated/glapi/glapi.py", "w")
     f.write(t_file)
     f.close()
 
@@ -50,8 +50,8 @@ def generate_settings(version):
     f = open("generated/settings.tmp", "r")
     t_settings = f.read()
     f.close()
-    t_settings = t_settings.replace("API_VERSION_TEMPLATE", __version)
-    f = open("generated/settings.py", "w")
+    t_settings = t_settings.replace("API_VERSION_TEMPLATE", __version + ".2")
+    f = open("generated/glapi/settings.py", "w")
     f.write(t_settings)
     f.close()
 
