@@ -50,7 +50,7 @@ def generate_settings(version):
     f = open("generated/settings.tmp", "r")
     t_settings = f.read()
     f.close()
-    t_settings = t_settings.replace("API_VERSION_TEMPLATE", __version + ".2")
+    t_settings = t_settings.replace("API_VERSION_TEMPLATE", __version + ".3")
     f = open("generated/settings.py", "w")
     f.write(t_settings)
     f.close()
