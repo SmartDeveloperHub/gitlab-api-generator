@@ -45,6 +45,10 @@ GEN_REP_BRANCH = "v."
 # Generator Doc Paths
 GEN_DOC_DISK_PATH = "/tmp/gitlab-ce-repo-doc"
 
+# Pypi Configuration
+PYPI_USER = ""
+PYPI_PASS = ""
+
 
 def print_message(msg):
     if DEBUGGER:
