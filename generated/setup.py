@@ -20,7 +20,7 @@
 """
 
 import os
-from glapi import settings
+import settings
 from setuptools import setup, find_packages
 
 __author__ = 'Alejandro F. Carrera'
@@ -39,8 +39,8 @@ setup(
     keywords="inner-source enhancer gitlab wrapper",
     url="https://github.com/SmartDeveloperHub/gitlab-api-generator",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-    package_data={'glapi': ['*.json']},
-    package_dir={'glapi': 'glapi'},
+    package_data={"data":["*.json"]},
+    py_modules=['glapi'],
     install_requires=['requests'],
     classifiers=[]
 )
