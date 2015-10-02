@@ -40,6 +40,7 @@ setup(
     url="https://github.com/SmartDeveloperHub/gitlab-api-generator",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     install_requires=['gittle', 'requests', 'HTMLParser'],
+    py_modules=['settings'],
     classifiers=[],
     scripts=['generator']
 )

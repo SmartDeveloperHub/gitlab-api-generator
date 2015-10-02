@@ -1,0 +1,3 @@
+recursive-include environment *
+recursive-include generated *
+recursive-include gitlab-docs *
