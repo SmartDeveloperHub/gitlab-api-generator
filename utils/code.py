@@ -19,8 +19,10 @@
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
 """
 
+from subprocess import call
 import settings
 import json
+import os
 
 __author__ = 'Alejandro F. Carrera'
 
@@ -42,13 +44,31 @@ def generate_pycode():
     f.close()
 
 
-def generate_pypi(version):
-    settings.print_message(" - Generating Pypi: %s ... " % version)
+def generate_settings(version):
+    __version = str(version).replace("-", ".")
+    settings.print_message(" - Generating settings.py: %s ... " % __version)
     f = open("generated/settings.tmp", "r")
     t_settings = f.read()
     f.close()
-    t_settings = t_settings.replace("API_VERSION_TEMPLATE", version)
+    t_settings = t_settings.replace("API_VERSION_TEMPLATE", __version)
     f = open("generated/settings.py", "w")
     f.write(t_settings)
     f.close()
+
+
+def generate_pypi_settings():
+    settings.print_message(" - Generating pypi config ... ")
+    f = open("generated/pypi.tmp", "r")
+    p_settings = f.read()
+    f.close()
+    p_settings = p_settings.replace("PYPI_USERNAME", settings.PYPI_USER)
+    p_settings = p_settings.replace("PYPI_PASSWORD", settings.PYPI_PASS)
+    f = open(os.path.join(os.path.expanduser('~'), ".pypirc"), "w")
+    f.write(p_settings)
+    f.close()
+
+
+def upload_package():
+    settings.print_message(" - Uploading pypi package ... ")
+    call(["pypi", "setup.py sdist upload -r pypi"])
 
