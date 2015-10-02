@@ -71,5 +71,5 @@ def generate_pypi_settings():
 def upload_package():
     settings.print_message(" - Uploading pypi package ... ")
     os.chdir("generated")
-    call(["python", "setup.py sdist upload -r pypi"])
+    call(["python", "setup.py", "sdist", "register", "upload", "-r", "pypi"])
 
