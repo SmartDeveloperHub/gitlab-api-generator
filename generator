@@ -45,27 +45,22 @@ if __name__ == '__main__':
         settings.print_message(" * [%s] Checking and clone Repositories ... " % settings.LONGNAME)
 
         __repo_gl = download.get_repo_gitlab()
-        __repo_lib = download.get_repo_library()
 
         # Get Branches information [filter]
         __gl_branches = repository.get_branches_with_filter(
             __repo_gl, settings.GEN_GL_BRANCH
-        )
-        __repo_branches = repository.get_branches_with_filter(
-            __repo_lib, settings.GEN_GL_BRANCH
         )
 
         # Replace -[filter] by blank and others unnecessary branches
         __gl_branches = repository.remove_info_from_branches(
             __gl_branches, settings.GEN_GL_BRANCH, settings.GEN_GL_BRANCH_REMOVE
         )
-        __repo_branches = repository.remove_info_from_branches(
-            __repo_branches, settings.GEN_GL_BRANCH, []
-        )
 
         # Get diff between branches
-        __gen_branches = list(set(__gl_branches) - set(__repo_branches))
-        __gen_branches_rt = map(lambda x: x + "-" + settings.GEN_GL_BRANCH, __gen_branches)
+        __gen_branches_rt = map(lambda x: x + "-" + settings.GEN_GL_BRANCH, __gl_branches)
+
+        # Generate Pypi configuration file
+        code.generate_pypi_settings()
 
         settings.print_message(" * [%s] Generating documentation ... " % settings.LONGNAME)
 
@@ -105,9 +100,6 @@ if __name__ == '__main__':
 
             # Generate settings file
             code.generate_settings(i.replace("-" + settings.GEN_GL_BRANCH, ""))
-
-            # Generate Pypi configuration file
-            code.generate_pypi_settings()
 
             # Upload Pypi package
             code.upload_package()
