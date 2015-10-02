@@ -25,7 +25,7 @@ __author__ = 'Alejandro F. Carrera'
 
 # Generator Package Configuration
 NAME = "gl-api-generator"
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 DEBUGGER = True
 LONGNAME = "Gitlab API Generator"
 
@@ -36,10 +36,6 @@ GEN_GL_BRANCH = "stable"
 GEN_GL_BRANCH_REMOVE = [
     "update_for_stable"
 ]
-
-# Generator API Paths
-GEN_REP_GIT = "https://github.com/SmartDeveloperHub/gitlab-api-generator.git"
-GEN_REP_DISK_PATH = "/tmp/gitlab-gen-repo"
 
 # Generator Doc Paths
 GEN_DOC_DISK_PATH = "/tmp/gitlab-ce-repo-doc"
