@@ -40,7 +40,7 @@ setup(
     url="https://github.com/SmartDeveloperHub/gitlab-api-generator",
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     package_data={"data":["*.json"]},
-    py_modules=['glapi'],
+    py_modules=['glapi', 'settings'],
     install_requires=['requests'],
     classifiers=[]
 )
