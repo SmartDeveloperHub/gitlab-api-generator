@@ -21,6 +21,7 @@
 
 import requests
 import json
+import os
 
 try:
     from urllib import quote_plus
@@ -31,7 +32,8 @@ except ImportError:
 __author__ = 'Alejandro F. Carrera'
 
 # Load metadata (code)
-with open('data/metadata.json') as data_file:
+rl_path = os.path.dirname(os.path.realpath(__file__))
+with open(os.path.join(rl_path, "data/metadata.json")) as data_file:
     metadata = json.load(data_file)
 
 
