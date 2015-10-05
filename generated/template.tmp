@@ -110,23 +110,28 @@ class GlAPI(object):
         :return: returns a dictionary with the information, false if there is an error
         """
         if "page" not in data and "per_page" not in data:
-            return self.execute_request(api_call, method, data)
-        else:
             if method != "get":
                 raise ValueError("pagination not allowed with method: " + method)
             __data = data
-            __data["page"] = 0
-            __data["per_page"] = 50
-            __res_length = -1
-            __res = []
-            while __res_length is not 0:
-                __r = self.execute_request(api_call, method, __data)
-                if __r is False and __data["page"] == 0:
-                    return False
-                __res += __r
-                __res_length = len(__r)
+            if api_call.endswith("projects"):
+                __data["page"] = 1
+            else:
+                __data["page"] = 0
+            __data["per_page"] = 1000
+            __ret = []
+            __ret_len = -1
+
+            while __ret_len is not 0:
+                __ret_temp = self.execute_request(api_call, method, __data)
+                if __ret_temp is False:
+                    __ret_len = 0
+                elif isinstance(__ret_temp, list):
+                    __ret_len = len(__ret_temp)
+                    __ret += __ret_temp
                 __data["page"] += 1
-            return __res
+            return __ret
+        else:
+            return self.execute_request(api_call, method, data)
 
     # Execution Method
     def execute_method(self, name, kwargs):
@@ -145,7 +150,7 @@ class GlAPI(object):
         # Generate URL Gitlab
         __url = __data.get("string")
         for i in __data.get("url_param").keys():
-            __url.replace(":" + i, str(kwargs[i]))
+            __url = __url.replace(":" + i, str(kwargs[i]))
         __url = self.host + "/api/v3/" + __url
         __url_method = str(__data.get("method")).lower()
 
