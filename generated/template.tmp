@@ -126,8 +126,11 @@ class GlAPI(object):
                 if __ret_temp is False:
                     __ret_len = 0
                 elif isinstance(__ret_temp, list):
-                    __ret_len = len(__ret_temp)
-                    __ret += __ret_temp
+                    if cmp(__ret_temp, __ret) == 0:
+                        __ret_len = 0
+                    else:
+                        __ret_len = len(__ret_temp)
+                        __ret += __ret_temp
                 __data["page"] += 1
             return __ret
         else:

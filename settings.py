@@ -25,7 +25,7 @@ __author__ = 'Alejandro F. Carrera'
 
 # Generator Package Configuration
 NAME = "gl-api-generator"
-VERSION = "1.7.0"
+VERSION = "1.8.0"
 DEBUGGER = True
 LONGNAME = "Gitlab API Generator"
 
